@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h> 
 
 typedef struct matrix {
     struct matrix* right;
@@ -23,6 +24,7 @@ Matrix* createNode(int lin, int col, float val) {
     newNode->info = val;
     return newNode;
 }
+
 //houses the element
 void insertElement(Matrix* m, int lin, int col, float val) {
     //creates the node for the new element
@@ -98,6 +100,48 @@ Matrix* matrix_create() {
 
         //properly stores the elements using the provided input (one at the time)
         insertElement(head, lin - 1, col - 1, val); 
+    }
+
+    return head;
+}
+
+Matrix* matrix_create_RAND(int size) {
+    //uses time to create row and cols
+    srand(time(NULL));
+
+    int line = size;
+    int cols = size;
+
+    Matrix* head = createNode(-1, -1, 0.0);
+    Matrix* cLine = head;
+    Matrix* cCol = head;
+
+    for (int i = 0; i < line; ++i) {
+        cLine->below = createNode(i, -1, 0.0);
+        cLine = cLine->below;
+    }
+
+    for (int j = 0; j < cols; ++j) {
+        cCol->right = createNode(-1, j, 0.0);
+        cCol = cCol->right;
+    }
+
+    for (int i = 0; i < line; ++i) {
+        cLine = head->below;
+        for (int j = 0; j < cols; ++j) {
+            cCol = head->right;
+            float value = (float)(rand() % 11); // random value between 0 and 10
+
+            if (value <= 50) {
+                // Fill with empty space
+                insertElement(head, i, j, 0.0);
+            } else {
+                // Fill with random value
+                insertElement(head, i, j, value);
+            }
+
+            cLine = cLine->below;
+        }
     }
 
     return head;
@@ -327,3 +371,41 @@ int main() {
     matrix_destroy( B );
     return 0;
 */  
+/*
+    Matrix *A = matrix_create();
+    matrix_print( A );
+    float b = matrix_getelem(A, 2, 3);
+    printf("%.2f",b);
+*/
+/*
+Matrix *A = matrix_create();
+    matrix_print( A );
+    Matrix *B = matrix_create(); 
+    matrix_print( B );
+    Matrix *C = matrix_multiply( A, B ); 
+    matrix_print( C );
+    matrix_destroy( C );
+    matrix_destroy( A );
+    matrix_destroy( B );
+    */
+   /*
+   Matrix *A = matrix_create();
+    matrix_print( A );
+   Matrix *B = matrix_transpose(A);
+   matrix_print( B );
+   matrix_destroy( A );
+   matrix_destroy( B );
+*/
+/*
+   Matrix *A = matrix_create();
+    matrix_print( A );
+    matrix_setelem(A, 2, 3, 1);
+    matrix_setelem(A, 3, 3, 999);
+    matrix_print( A );
+    */
+   /*
+   Matrix *A = matrix_create_RAND(1000);
+   matrix_print( A );
+   matrix_destroy( A );
+   */
+}
